@@ -15,6 +15,9 @@ public:
 	explicit MainDialog(QWidget *parent = nullptr);
 	~MainDialog();
 
+private slots:
+	void on_pushButtonReadMatrix_clicked();
+
 private:
 	Ui::MainDialog *ui;
 };

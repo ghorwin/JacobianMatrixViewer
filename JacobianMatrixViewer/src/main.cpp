@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 	w.show();
 
 	// start event loop
-	res = a.exec();
+	int res = a.exec();
 
 	// return exit code to environment
 	return res;
