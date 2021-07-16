@@ -25,11 +25,13 @@ private slots:
 	void on_pushButtonReadMatrix_clicked();
 
 private:
+	void updateView();
+
 	Ui::MainDialog *ui;
 
-	IBKMK::SparseMatrixCSR		*m_sparseMatrixCSR;
-//	IBKMK::SparseMatrixEID		*m_sparseMatrixEID;
-	IBKMK::DenseMatrix			*m_denseMatrix;
+	IBKMK::SparseMatrixCSR		*m_sparseMatrixCSR = nullptr;
+//	IBKMK::SparseMatrixEID		*m_sparseMatrixEID = nullptr;
+	IBKMK::DenseMatrix			*m_denseMatrix = nullptr;
 
 };
 

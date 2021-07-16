@@ -4,16 +4,6 @@
 
 TARGET = JacobianMatrixViewer
 TEMPLATE = app
-CONFIG += console
-CONFIG -= app_bundle
-
-# Project file for SIM-VICUS
-#
-# remember to set DYLD_FALLBACK_LIBRARY_PATH on MacOSX
-# set LD_LIBRARY_PATH on Linux
-
-TARGET = SIM-VICUS
-TEMPLATE = app
 
 # this pri must be sourced from all our applications
 include( ../../../externals/IBK/projects/Qt/IBK.pri )
