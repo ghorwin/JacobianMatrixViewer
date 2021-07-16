@@ -49,10 +49,14 @@ FORMS += \
 
 HEADERS += \
 	../../src/MainDialog.h \
+	../../src/MatrixAdapter.h \
 	../../src/MatrixInterfaceBand.h \
 	../../src/MatrixInterfaceSparse.h \
+	../../src/MatrixTableModel.h \
 	../../src/MatrixVisualizer.h
 
 SOURCES += \
 	../../src/MainDialog.cpp \
+	../../src/MatrixAdapter.cpp \
+	../../src/MatrixTableModel.cpp \
 	../../src/main.cpp

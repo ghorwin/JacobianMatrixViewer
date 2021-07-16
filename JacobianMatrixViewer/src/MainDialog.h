@@ -3,16 +3,12 @@
 
 #include <QDialog>
 
+#include "MatrixAdapter.h"
+
 namespace Ui {
 	class MainDialog;
 }
 
-namespace IBKMK {
-	class SparseMatrixCSR;
-//	class SparseMatrixEID;
-	class DenseMatrix;
-//	class BandMatrix;
-}
 
 class MainDialog : public QDialog {
 	Q_OBJECT
@@ -25,14 +21,13 @@ private slots:
 	void on_pushButtonReadMatrix_clicked();
 
 private:
+	void readMatrix(MatrixAdapater & storage, const QString & openFile);
 	void updateView();
 
 	Ui::MainDialog *ui;
 
-	IBKMK::SparseMatrixCSR		*m_sparseMatrixCSR = nullptr;
-//	IBKMK::SparseMatrixEID		*m_sparseMatrixEID = nullptr;
-	IBKMK::DenseMatrix			*m_denseMatrix = nullptr;
-
+	MatrixAdapter			m_mainMatrix;
+	MatrixAdapter			m_otherMatrix;
 };
 
 #endif // MAINDIALOG_H

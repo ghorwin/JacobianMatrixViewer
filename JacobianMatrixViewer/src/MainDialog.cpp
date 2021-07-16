@@ -43,28 +43,25 @@ MainDialog::MainDialog(QWidget *parent) :
 
 MainDialog::~MainDialog() {
 	delete ui;
-
-	delete m_sparseMatrixCSR;
-	m_sparseMatrixCSR = nullptr;
-	delete m_denseMatrix;
-	m_denseMatrix = nullptr;
 }
 
 
 void MainDialog::on_pushButtonReadMatrix_clicked() {
-	FUNCID(MainDialog::on_pushButtonReadMatrix_clicked);
-
 	QString openFile = QFileDialog::getOpenFileName(this, tr("Select matrix file"),
 													QString(), tr("Plain text table (*.txt *.tsv);;Binary format (*.bin);;All files (*)"),
 													nullptr, QFileDialog::DontUseNativeDialog);
 	if (openFile.isEmpty())
 		return;
 
-	delete m_sparseMatrixCSR;
-	m_sparseMatrixCSR = nullptr;
-	delete m_denseMatrix;
-	m_denseMatrix = nullptr;
+	readMatrix(m_mainMatrix, openFile);
 	updateView();
+}
+
+
+void MainDialog::readMatrix(MatrixAdapater & storage, const QString & openFile) {
+	FUNCID(MainDialog::readMatrix);
+
+	storage.clear();
 
 	try {
 		// if binary mode, ask user about matrix type
@@ -76,35 +73,34 @@ void MainDialog::on_pushButtonReadMatrix_clicked() {
 
 			std::vector<unsigned char> buffer(std::istreambuf_iterator<char>(in), {});
 
-
 			// determine matrix type
 			void * dataPtr = buffer.data();
 			char matType = *(char*)dataPtr;
 
 			switch (matType) {
 				case MT_DenseMatrix :  {
-					m_denseMatrix = new IBKMK::DenseMatrix;
-					m_denseMatrix->recreate(dataPtr);
+					storage.m_denseMatrix = new IBKMK::DenseMatrix;
+					storage.m_denseMatrix->recreate(dataPtr);
 				} break;
 
 				case MT_SparseMatrixCSR : {
-					m_sparseMatrixCSR = new IBKMK::SparseMatrixCSR;
-					m_sparseMatrixCSR->recreate(dataPtr);
+					storage.m_sparseMatrixCSR = new IBKMK::SparseMatrixCSR;
+					storage.m_sparseMatrixCSR->recreate(dataPtr);
 				} break;
 			}
 		}
 		else {
 			// we only know dense matrix text files, but some with [] and some without
-			m_denseMatrix = new IBKMK::DenseMatrix;
+			storage.m_denseMatrix = new IBKMK::DenseMatrix;
 
 			// we first parse the matrix with the file reader
 
-			FileReaderDataProcessorValueMatrix lineProcessor(*m_denseMatrix);
+			FileReaderDataProcessorValueMatrix lineProcessor(*storage.m_denseMatrix);
 			IBK::FileReader::readAll( IBK::Path(openFile.toStdString()), &lineProcessor, std::vector<std::string>(), 0, nullptr);
 			// check that entire matrix was read
-			if (lineProcessor.m_linesRead != m_denseMatrix->n())
+			if (lineProcessor.m_linesRead != storage.m_denseMatrix->n())
 				throw IBK::Exception(IBK::FormatString("Incomplete matrix in file, only got %1 rows, but matrix dimension is %2.")
-									 .arg(lineProcessor.m_linesRead).arg(m_denseMatrix->n()), FUNC_ID);
+									 .arg(lineProcessor.m_linesRead).arg(storage.m_denseMatrix->n()), FUNC_ID);
 		}
 	}
 	catch (IBK::Exception & ex) {

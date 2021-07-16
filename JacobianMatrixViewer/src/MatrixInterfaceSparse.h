@@ -1,7 +1,7 @@
 #ifndef MatrixInterfaceSparseH
 #define MatrixInterfaceSparseH
 
-#include <IBK_SparseMatrix.h>
+#include <IBKMK_SparseMatrixCSR.h>
 #include <limits>
 
 /*! Implementation of an interface to the IBK::SparseMatrix.
@@ -11,7 +11,7 @@ class MatrixInterfaceSparse {
 public:
 
 	/*! Sets a new matrix content to the matrix interface. */
-	void setMatrix(const IBK::SparseMatrix & matrix) {
+	void setMatrix(const IBKMK::SparseMatrixCSR & matrix) {
 		m_matrix = matrix;
 	}
 
@@ -33,7 +33,7 @@ public:
 	}
 
 	/*! Storage member, holds matrix data to be used for drawing matrix. */
-	IBK::SparseMatrix	m_matrix;
+	IBKMK::SparseMatrixCSR	m_matrix;
 };
 
 #endif // MatrixInterfaceSparseH
