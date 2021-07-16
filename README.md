@@ -36,13 +36,13 @@ that is avoided when dumping the Jacobian data.
 
 Now take a look at a sparse matrix:
 
-<img src="doc/SparseMatrixCSR.png" width="600px"/>
+<img src="doc/SparseMatrixCSR.png" width="100%"/>
 
 Here, you see cells with dark-gray background. These are not part of the Jacobian pattern.
 
 Finally, you can compare the two (radio-button "Difference"):
 
-<img src="doc/Difference.png" width="600px"/>
+<img src="doc/Difference.png" width="100%"/>
 
 This is a bit more colorful:
 
