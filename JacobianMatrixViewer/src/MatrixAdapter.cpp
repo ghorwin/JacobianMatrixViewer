@@ -38,8 +38,12 @@ SingleMatrixAdapter::CellState SingleMatrixAdapter::state(unsigned int i, unsign
 		unsigned int colIndx = m_sparseMatrixCSR->storageIndex(i,j);
 		if (colIndx == m_sparseMatrixCSR->nnz())
 			return CS_Unused;
-		else
-			return CS_Used;
+		else {
+			if (std::fabs(value(i,j)) < LIMIT )
+				return CS_Zero;
+			else
+				return CS_Used;
+		}
 	}
 	else if (m_denseMatrix != nullptr) {
 		if (std::fabs(value(i,j)) < LIMIT )
@@ -118,9 +122,12 @@ ComparisonMatrixAdapter::CellState ComparisonMatrixAdapter::state(unsigned int i
 			return CS_MayBeDifferentByUsage;
 	}
 
-	IBK_ASSERT(false);
-//	if (m_first->value(i,j) != m_second->value(i,j))
-	return CS_DifferentByValue;
+	// one is zero, the other has some value
+	double diff = std::fabs(m_first->value(i,j) - m_second->value(i,j));
+	if (diff < 1e-5)
+		return CS_SlightlyDifferentByValue;
+	else
+		return CS_DifferentByValue;
 }
 
 

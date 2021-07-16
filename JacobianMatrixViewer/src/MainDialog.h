@@ -29,9 +29,13 @@ private slots:
 
 	void on_radioButtonDifference_toggled(bool checked);
 
+	void on_spinBoxPixel_valueChanged(int arg1);
+
 private:
 	void readMatrix(SingleMatrixAdapter & storage, const QString & openFile);
 	void updateView();
+
+	QPixmap generatePixmap() const;
 
 	Ui::MainDialog *ui;
 

@@ -11,12 +11,14 @@ public:
 		QAbstractTableModel(parent)
 	{}
 
-	void setData(const AbstractMatrixAdapter * adapter);
+	void setMatrixAdapter(const AbstractMatrixAdapter * adapter);
 
 	QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 	int rowCount(const QModelIndex & parent) const override;
 	int columnCount(const QModelIndex & parent) const override;
 	QVariant data(const QModelIndex & index, int role) const override;
+
+	const AbstractMatrixAdapter * matrixAdapter() const { return m_matrixAdapter; }
 
 private:
 	const AbstractMatrixAdapter * m_matrixAdapter = nullptr;

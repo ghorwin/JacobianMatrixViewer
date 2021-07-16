@@ -3,6 +3,7 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QPainter>
 
 #include <fstream>
 
@@ -40,6 +41,7 @@ MainDialog::MainDialog(QWidget *parent) :
 	ui(new Ui::MainDialog)
 {
 	ui->setupUi(this);
+	ui->labelPixmap->setText(QString());
 
 	m_tableModel = new MatrixTableModel(this);
 
@@ -148,22 +150,26 @@ void MainDialog::updateView() {
 	// we first populate the table
 	if (ui->radioButtonFirst->isChecked()) {
 		if (m_mainMatrix.dimension() == 0)
-			m_tableModel->setData(nullptr);
+			m_tableModel->setMatrixAdapter(nullptr);
 		else
-			m_tableModel->setData(&m_mainMatrix);
+			m_tableModel->setMatrixAdapter(&m_mainMatrix);
 	}
 	else if (ui->radioButtonSecond->isChecked()) {
 		if (m_otherMatrix.dimension() == 0)
-			m_tableModel->setData(nullptr);
+			m_tableModel->setMatrixAdapter(nullptr);
 		else
-			m_tableModel->setData(&m_otherMatrix);
+			m_tableModel->setMatrixAdapter(&m_otherMatrix);
 	}
 	else {
 		if (m_differenceMatrix.dimension() == 0)
-			m_tableModel->setData(nullptr);
+			m_tableModel->setMatrixAdapter(nullptr);
 		else
-			m_tableModel->setData(&m_differenceMatrix);
+			m_tableModel->setMatrixAdapter(&m_differenceMatrix);
 	}
+
+	// now generate the preview-pixmap
+	ui->labelPixmap->setPixmap(generatePixmap());
+	ui->labelPixmap->setMinimumSize( ui->labelPixmap->pixmap()->size());
 }
 
 
@@ -213,4 +219,63 @@ void MainDialog::on_radioButtonSecond_toggled(bool checked) {
 void MainDialog::on_radioButtonDifference_toggled(bool checked) {
 	if (checked)
 		updateView();
+}
+
+
+QPixmap MainDialog::generatePixmap() const {
+	// compute size in pixels
+	unsigned int n = m_tableModel->rowCount(QModelIndex());
+	if (n == 0)
+		return QPixmap();
+
+	unsigned int cellPixelSize = ui->spinBoxPixel->value();
+	unsigned int pixSize = n*cellPixelSize;
+	unsigned int borderLinePixelWidth = 1;
+	QColor backgroundColor(Qt::white);
+	QColor usedCellColor(Qt::black);
+	QColor usedButZeroCellColor(Qt::lightGray);
+
+	// create pixmap with desired sizes but add pixels for boundary
+	QPixmap pixmap(pixSize + 2*borderLinePixelWidth, pixSize + 2*borderLinePixelWidth);
+
+	// fill pixmap with transparent color
+	pixmap.fill( backgroundColor );
+
+	QPainter p(&pixmap);
+
+	// draw pixels
+	for (unsigned int i=0; i<n; ++i) {
+		for (unsigned int j=0; j<n; ++j) {
+			// get state of cell
+			AbstractMatrixAdapter::CellState s = m_tableModel->matrixAdapter()->state(i,j);
+			if (s == AbstractMatrixAdapter::CS_Unused)
+				continue;
+			QColor cellColor;
+			if (s == AbstractMatrixAdapter::CS_Zero)
+				cellColor = usedButZeroCellColor;
+			else
+				cellColor = usedCellColor;
+
+//			double val = m_tableModel->matrixAdapter()->value(i,j);
+			p.fillRect(borderLinePixelWidth + j*cellPixelSize, borderLinePixelWidth + i*cellPixelSize,
+					   cellPixelSize, cellPixelSize, cellColor);
+		}
+	}
+
+	// draw boundary
+	if (borderLinePixelWidth != 0) {
+		QPen borderPen(usedCellColor);
+		borderPen.setWidth(borderLinePixelWidth);
+
+		p.setPen( borderPen );
+		p.drawRect(borderLinePixelWidth/2,borderLinePixelWidth/2,
+				   pixSize+1.5*borderLinePixelWidth, pixSize+1.5*borderLinePixelWidth);
+	}
+
+	return pixmap;
+}
+
+
+void MainDialog::on_spinBoxPixel_valueChanged(int) {
+	updateView();
 }

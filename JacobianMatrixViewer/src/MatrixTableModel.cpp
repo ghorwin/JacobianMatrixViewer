@@ -6,7 +6,7 @@
 
 #include "MatrixAdapter.h"
 
-void MatrixTableModel::setData(const AbstractMatrixAdapter * adapter) {
+void MatrixTableModel::setMatrixAdapter(const AbstractMatrixAdapter * adapter) {
 	beginResetModel();
 	m_matrixAdapter = adapter;
 	endResetModel();
