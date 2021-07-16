@@ -28,7 +28,7 @@ public:
 	virtual void processLine(const std::string& line) override;
 	virtual int lineCount() const override { return (int)m_matrix->n(); }
 
-	unsigned int		m_linesRead = 0;
+	unsigned long		m_linesRead = 0;
 
 private:
 	IBKMK::DenseMatrix	*m_matrix = nullptr;
@@ -43,6 +43,9 @@ MainDialog::MainDialog(QWidget *parent) :
 
 	m_tableModel = new MatrixTableModel(this);
 
+	m_differenceMatrix.m_first = &m_mainMatrix;
+	m_differenceMatrix.m_second = &m_otherMatrix;
+
 	ui->tableView->setModel(m_tableModel);
 	ui->tableView->verticalHeader()->setDefaultSectionSize(12);
 	ui->tableView->horizontalHeader()->setDefaultSectionSize(55);
@@ -56,7 +59,7 @@ MainDialog::~MainDialog() {
 
 void MainDialog::on_pushButtonReadMatrix_clicked() {
 	QString openFile = QFileDialog::getOpenFileName(this, tr("Select matrix file"),
-													QString(), tr("Plain text table (*.txt *.tsv);;Binary format (*.bin);;All files (*)"),
+													QString(), tr("All files (*);;Plain text table (*.txt *.tsv);;Binary format (*.bin)"),
 													nullptr, QFileDialog::DontUseNativeDialog);
 	if (openFile.isEmpty())
 		return;
@@ -72,7 +75,7 @@ void MainDialog::on_pushButtonReadMatrix_clicked() {
 
 void MainDialog::on_pushButtonCompareWithOther_clicked() {
 	QString openFile = QFileDialog::getOpenFileName(this, tr("Select matrix file"),
-													QString(), tr("Plain text table (*.txt *.tsv);;Binary format (*.bin);;All files (*)"),
+													QString(), tr("All files (*);;Plain text table (*.txt *.tsv);;Binary format (*.bin)"),
 													nullptr, QFileDialog::DontUseNativeDialog);
 	if (openFile.isEmpty())
 		return;
@@ -154,6 +157,12 @@ void MainDialog::updateView() {
 			m_tableModel->setData(nullptr);
 		else
 			m_tableModel->setData(&m_otherMatrix);
+	}
+	else {
+		if (m_differenceMatrix.dimension() == 0)
+			m_tableModel->setData(nullptr);
+		else
+			m_tableModel->setData(&m_differenceMatrix);
 	}
 }
 

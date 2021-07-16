@@ -14,11 +14,27 @@ public:
 
 	/*! The cell state returned for each cell. */
 	enum CellState {
+
+		/*! Indicates that is cell is used and has a value different from zero. */
 		CS_Used,
+		/*! Indicates that is cell is not part of the matrix pattern. */
 		CS_Unused,
+		/*! Indicates that is cell is used and has a value of zero. */
 		CS_Zero,
+
+		/*! One of the matrix has Unused value, the other one has a value different from zero (this definitely present).
+			This indicates a pattern error in the matrix with smaller pattern.
+		*/
 		CS_DifferentByUsage,
-		CS_DifferentByValue
+
+		/*! One of the matrixes has Unused value, the other one has a zero value. This may indicate a pattern error
+			but is likely the cause when the more filled pattern just computed a zero where there is no entry. */
+		CS_MayBeDifferentByUsage,
+
+		/*! Both matrixes have a used cell, but different values. */
+		CS_DifferentByValue,
+		/*! Both matrixes have a used cell, but slightly different values (1e-9) */
+		CS_SlightlyDifferentByValue
 	};
 
 	/*! Releases memory. */
@@ -61,5 +77,16 @@ public:
 };
 
 
+class ComparisonMatrixAdapter : public AbstractMatrixAdapter {
+public:
+
+	// AbstractMatrixAdapter interface
+	unsigned int dimension() const override;
+	CellState state(unsigned int i, unsigned int j) const override;
+	double value(unsigned int i, unsigned int j) const override;
+
+	SingleMatrixAdapter	*m_first = nullptr;
+	SingleMatrixAdapter	*m_second = nullptr;
+};
 
 #endif // MATRIXADAPATER_H

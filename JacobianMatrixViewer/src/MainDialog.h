@@ -39,6 +39,8 @@ private:
 
 	SingleMatrixAdapter			m_mainMatrix;
 	SingleMatrixAdapter			m_otherMatrix;
+
+	ComparisonMatrixAdapter		m_differenceMatrix;
 };
 
 #endif // MAINDIALOG_H

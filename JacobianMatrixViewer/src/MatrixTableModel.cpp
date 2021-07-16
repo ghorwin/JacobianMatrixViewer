@@ -79,17 +79,21 @@ QVariant MatrixTableModel::data(const QModelIndex & index, int role) const {
 		case Qt::BackgroundRole :
 			switch (m_matrixAdapter->state((unsigned int)index.row(), (unsigned int)index.column())) {
 				case AbstractMatrixAdapter::CS_Used:
-					return QColor("gold");
+					return QColor("#B9EF8F");
 				case AbstractMatrixAdapter::CS_Unused:
 					return QColor(192,192,192);
 				case AbstractMatrixAdapter::CS_Zero:
 					return QColor(Qt::white);
 
 				case AbstractMatrixAdapter::CS_DifferentByUsage:
-					return QColor(Qt::darkCyan);
+					return QColor("#E50000");
+				case AbstractMatrixAdapter::CS_MayBeDifferentByUsage:
+					return QColor("#FFE0AD");
 
 				case AbstractMatrixAdapter::CS_DifferentByValue:
-					return QColor(Qt::red);
+					return QColor("#65C3FF");
+				case AbstractMatrixAdapter::CS_SlightlyDifferentByValue:
+					return QColor("#E6ECFF");
 			}
 		break;
 
