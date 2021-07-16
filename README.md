@@ -27,7 +27,7 @@ Use the radio-buttons to switch between different views.
 
 For example, look at the dense reference matrix:
 
-<img src="doc/DenseReference.png" width="600px"/>
+<img src="doc/DenseReference.png" width="100%"/>
 
 Green are cells with numbers different from zero and hence definitely part of the Jacobian pattern.
 White are cells with zero, which can either mean "not part of the Jacobian pattern", or computed to be zero. 
