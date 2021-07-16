@@ -52,6 +52,11 @@ This is a bit more colorful:
 - _red_ : cells that have values in one matrix, yet are not part of the Jacobian pattern in the other matrix. This clearly indicates that the sparse matrix missing cells in its pattern.
 
 
+The conclusions to be drawn from the comparison above are:
+- the lower cells in column 1 are correctly present in the sparse matrix pattern, yet computed wrong (or not at all); this may indicate a bug in the coloring algorithm of the Jacobian composition algorithm that uses the matrix pattern
+- the red cell (2,1) indicates that this cell is missing in the sparse matrix pattern
+- the blue cell (2,3) shows an invalid value -> probably related to the cell (2,1) issue
+
 ## Binary matrix formats
 
 TODO ...
