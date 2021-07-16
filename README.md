@@ -30,7 +30,7 @@ For example, look at the dense reference matrix:
 <img src="doc/DenseReference.png" width="100%"/>
 
 Green are cells with numbers different from zero and hence definitely part of the Jacobian pattern.
-White are cells with zero, which can either mean "not part of the Jacobian pattern", or computed to be zero. 
+White are cells with zeros, which can either mean "not part of the Jacobian pattern", or computed to be zero. 
 With many physical codes zeros can appear in the Jacobian matrix when clipping takes place, so make sure 
 that is avoided when dumping the Jacobian data.
 
