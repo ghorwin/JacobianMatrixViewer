@@ -85,7 +85,7 @@ ComparisonMatrixAdapter::CellState ComparisonMatrixAdapter::state(unsigned int i
 	if (f1 == f2) {
 		if (f1 == CS_Used || f2 == CS_Used) {
 			double diff = std::fabs(m_first->value(i,j) - m_second->value(i,j));
-			if (diff < 1e-8)
+			if (diff < 1e-5)
 				return CS_SlightlyDifferentByValue;
 			else
 				return CS_DifferentByValue;
