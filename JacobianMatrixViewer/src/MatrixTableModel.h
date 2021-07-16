@@ -3,7 +3,7 @@
 
 #include <QAbstractTableModel>
 
-class MatrixAdapter;
+class AbstractMatrixAdapter;
 
 class MatrixTableModel : public QAbstractTableModel {
 public:
@@ -11,14 +11,16 @@ public:
 		QAbstractTableModel(parent)
 	{}
 
-	void setData(const MatrixAdapter * adapter);
+	void setData(const AbstractMatrixAdapter * adapter);
 
+	QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 	int rowCount(const QModelIndex & parent) const override;
 	int columnCount(const QModelIndex & parent) const override;
 	QVariant data(const QModelIndex & index, int role) const override;
 
 private:
-	const MatrixAdapter * m_matrixAdapter = nullptr;
+	const AbstractMatrixAdapter * m_matrixAdapter = nullptr;
+
 };
 
 

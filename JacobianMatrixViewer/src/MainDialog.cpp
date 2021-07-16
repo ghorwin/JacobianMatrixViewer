@@ -11,7 +11,9 @@
 
 #include <IBKMK_SparseMatrixCSR.h>
 #include <IBKMK_DenseMatrix.h>
-#include "IBKMK_common_defines.h"
+#include <IBKMK_common_defines.h>
+
+#include "MatrixTableModel.h"
 
 class FileReaderDataProcessorValueMatrix : public IBK::AbstractFileReaderDataProcessor {
 public:
@@ -29,7 +31,7 @@ public:
 	unsigned int		m_linesRead = 0;
 
 private:
-	IBKMK::DenseMatrix	*m_matrix;
+	IBKMK::DenseMatrix	*m_matrix = nullptr;
 };
 
 
@@ -38,6 +40,12 @@ MainDialog::MainDialog(QWidget *parent) :
 	ui(new Ui::MainDialog)
 {
 	ui->setupUi(this);
+
+	m_tableModel = new MatrixTableModel(this);
+
+	ui->tableView->setModel(m_tableModel);
+	ui->tableView->verticalHeader()->setDefaultSectionSize(12);
+	ui->tableView->horizontalHeader()->setDefaultSectionSize(55);
 }
 
 
@@ -54,11 +62,33 @@ void MainDialog::on_pushButtonReadMatrix_clicked() {
 		return;
 
 	readMatrix(m_mainMatrix, openFile);
+	if (m_mainMatrix.dimension() != 0)
+		ui->lineEditMatrixFile->setText(openFile);
+	else
+		ui->lineEditMatrixFile->clear();
 	updateView();
 }
 
 
-void MainDialog::readMatrix(MatrixAdapater & storage, const QString & openFile) {
+void MainDialog::on_pushButtonCompareWithOther_clicked() {
+	QString openFile = QFileDialog::getOpenFileName(this, tr("Select matrix file"),
+													QString(), tr("Plain text table (*.txt *.tsv);;Binary format (*.bin);;All files (*)"),
+													nullptr, QFileDialog::DontUseNativeDialog);
+	if (openFile.isEmpty())
+		return;
+
+	readMatrix(m_otherMatrix, openFile);
+	if (m_otherMatrix.dimension() != 0) {
+		ui->lineEditOtherMatrixFile->setText(openFile);
+		ui->radioButtonSecond->setChecked(true);
+	}
+	else
+		ui->lineEditOtherMatrixFile->clear();
+	updateView();
+}
+
+
+void MainDialog::readMatrix(SingleMatrixAdapter & storage, const QString & openFile) {
 	FUNCID(MainDialog::readMatrix);
 
 	storage.clear();
@@ -108,14 +138,23 @@ void MainDialog::readMatrix(MatrixAdapater & storage, const QString & openFile) 
 		QMessageBox::critical(this, QString(), tr("Error reading file '%1', see console output for details.").arg(openFile));
 		return;
 	}
-	updateView();
 }
 
 
 void MainDialog::updateView() {
 	// we first populate the table
-
-
+	if (ui->radioButtonFirst->isChecked()) {
+		if (m_mainMatrix.dimension() == 0)
+			m_tableModel->setData(nullptr);
+		else
+			m_tableModel->setData(&m_mainMatrix);
+	}
+	else if (ui->radioButtonSecond->isChecked()) {
+		if (m_otherMatrix.dimension() == 0)
+			m_tableModel->setData(nullptr);
+		else
+			m_tableModel->setData(&m_otherMatrix);
+	}
 }
 
 
@@ -149,4 +188,20 @@ void FileReaderDataProcessorValueMatrix::processLine(const std::string& line) {
 		throw IBK::Exception(ex, IBK::FormatString("Error parsing line #%1 with content '%2'.")
 					.arg(m_linesRead+1).arg(line), FUNC_ID);
 	}
+}
+
+
+void MainDialog::on_radioButtonFirst_toggled(bool checked) {
+	if (checked)
+		updateView();
+}
+
+void MainDialog::on_radioButtonSecond_toggled(bool checked) {
+	if (checked)
+		updateView();
+}
+
+void MainDialog::on_radioButtonDifference_toggled(bool checked) {
+	if (checked)
+		updateView();
 }
