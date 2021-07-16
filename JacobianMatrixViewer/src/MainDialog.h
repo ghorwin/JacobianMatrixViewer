@@ -4,11 +4,17 @@
 #include <QDialog>
 
 namespace Ui {
-class MainDialog;
+	class MainDialog;
 }
 
-class MainDialog : public QDialog
-{
+namespace IBKMK {
+	class SparseMatrixCSR;
+//	class SparseMatrixEID;
+	class DenseMatrix;
+//	class BandMatrix;
+}
+
+class MainDialog : public QDialog {
 	Q_OBJECT
 
 public:
@@ -20,6 +26,11 @@ private slots:
 
 private:
 	Ui::MainDialog *ui;
+
+	IBKMK::SparseMatrixCSR		*m_sparseMatrixCSR;
+//	IBKMK::SparseMatrixEID		*m_sparseMatrixEID;
+	IBKMK::DenseMatrix			*m_denseMatrix;
+
 };
 
 #endif // MAINDIALOG_H
