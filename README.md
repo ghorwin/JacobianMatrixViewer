@@ -9,9 +9,11 @@ convergence failures, but often enough the effects are subtle, and it is hard to
 Especially, since a well-written Newton-equation solver within an adaptive time step integrator will
 still yield correct results - yet potentially much slower.
 
-## Download and Installation
+## Installation
 
-None, so far. Just download the source, fire up Qt Creator and build it yourself. I may add pre-compiled binaries once the tool is done.
+Grab the release and attached archives, extract, on Linux install Qt dependency, run.
+
+You can always build from source, see below.
 
 ## Usage
 
@@ -47,9 +49,9 @@ Finally, you can compare the two (radio-button "Difference"):
 This is a bit more colorful:
 
 - _orange_ : cells that are zero in one matrix and non-existend in the other; usually this means that these cells are not part of the Jacobian pattern
-- _light blue_ : cells that have values in both matrixes and whose values differ only marginally (less than 1e-5)
+- _light blue_ : cells that have values in both matrixes and whose values differ only marginally (compared with relative tolerance of 1e-5 and absolute tolerance of 1e-9)
 - _blue_ : cells that have values in both matrixes and show significant differences -> this usually indicates a *bug* in the Jacobian calculation/composition algorithm
-- _red_ : cells that have values in one matrix, yet are not part of the Jacobian pattern in the other matrix. This clearly indicates that the sparse matrix missing cells in its pattern.
+- _red_ : cells that have values in one matrix, yet are not part of the Jacobian pattern in the other matrix. This clearly indicates that the sparse matrix is missing cells in its pattern.
 
 
 The conclusions to be drawn from the comparison above are:
@@ -63,4 +65,17 @@ TODO ...
 
 
 
+
+## Building from source
+
+Two options: CMake and Qt
+
+### CMake
+
+Got to subdirectory `build/cmake`.
+
+On windows, edit build
+
+
+None, so far. Just download the source, fire up Qt Creator and build it yourself. I may add pre-compiled binaries once the tool is done.
 
