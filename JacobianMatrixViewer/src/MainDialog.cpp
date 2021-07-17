@@ -37,7 +37,7 @@ private:
 
 
 MainDialog::MainDialog(QWidget *parent) :
-	QDialog(parent),
+	QDialog(parent, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowMinMaxButtonsHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint),
 	ui(new Ui::MainDialog)
 {
 	ui->setupUi(this);

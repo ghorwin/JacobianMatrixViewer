@@ -38,8 +38,6 @@ void qDebugMsgHandler(QtMsgType type, const QMessageLogContext &context, const Q
 
 
 int main(int argc, char *argv[]) {
-	const char * const FUNC_ID = "[main]";
-
 	// create QApplication
 	QApplication a(argc, argv);
 
