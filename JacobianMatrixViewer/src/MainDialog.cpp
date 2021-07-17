@@ -61,7 +61,7 @@ MainDialog::~MainDialog() {
 
 void MainDialog::on_pushButtonReadMatrix_clicked() {
 	QString openFile = QFileDialog::getOpenFileName(this, tr("Select matrix file"),
-													QString(), tr("All files (*);;Plain text table (*.txt *.tsv);;Binary format (*.bin)"),
+													ui->lineEditMatrixFile->text(), tr("All files (*);;Plain text table (*.txt *.tsv);;Binary format (*.bin)"),
 													nullptr, QFileDialog::DontUseNativeDialog);
 	if (openFile.isEmpty())
 		return;
@@ -76,8 +76,11 @@ void MainDialog::on_pushButtonReadMatrix_clicked() {
 
 
 void MainDialog::on_pushButtonCompareWithOther_clicked() {
+	QString initialFile = ui->lineEditOtherMatrixFile->text();
+	if (initialFile.isEmpty())
+		initialFile = ui->lineEditMatrixFile->text();
 	QString openFile = QFileDialog::getOpenFileName(this, tr("Select matrix file"),
-													QString(), tr("All files (*);;Plain text table (*.txt *.tsv);;Binary format (*.bin)"),
+													initialFile, tr("All files (*);;Plain text table (*.txt *.tsv);;Binary format (*.bin)"),
 													nullptr, QFileDialog::DontUseNativeDialog);
 	if (openFile.isEmpty())
 		return;
