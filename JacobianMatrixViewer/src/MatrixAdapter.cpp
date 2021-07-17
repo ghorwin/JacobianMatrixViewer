@@ -1,7 +1,17 @@
 #include "MatrixAdapter.h"
 
+#ifdef Q_OS_WIN
+	#ifndef NOMINMAX
+		#define NOMINMAX
+	#endif
+#endif
+
+#include <algorithm> // for std::max on windows
+#include <cmath>     // for std::fabs
+
 #include <IBKMK_SparseMatrixCSR.h>
 #include <IBKMK_DenseMatrix.h>
+
 
 double AbstractMatrixAdapter::m_relTol = 1e-5;
 double AbstractMatrixAdapter::m_absTol = 1e-9;

@@ -138,7 +138,7 @@ void MainDialog::readMatrix(SingleMatrixAdapter & storage, const QString & openF
 			// check that entire matrix was read
 			if (lineProcessor.m_linesRead != storage.m_denseMatrix->n())
 				throw IBK::Exception(IBK::FormatString("Incomplete matrix in file, only got %1 rows, but matrix dimension is %2.")
-									 .arg(lineProcessor.m_linesRead).arg(storage.m_denseMatrix->n()), FUNC_ID);
+									 .arg((unsigned int)lineProcessor.m_linesRead).arg(storage.m_denseMatrix->n()), FUNC_ID);
 		}
 	}
 	catch (IBK::Exception & ex) {
@@ -190,7 +190,7 @@ void FileReaderDataProcessorValueMatrix::processLine(const std::string& line) {
 		IBK::string2valueVector(modifiedLine, vals);
 		// if this is the first line, we resize the target matrix accordingly
 		if (m_linesRead == 0)
-			m_matrix->resize(vals.size());
+			m_matrix->resize((unsigned int)vals.size());
 		else {
 			// otherwise check that dimensions match
 			if (m_matrix->n() != vals.size())
@@ -204,7 +204,7 @@ void FileReaderDataProcessorValueMatrix::processLine(const std::string& line) {
 	}
 	catch (IBK::Exception & ex) {
 		throw IBK::Exception(ex, IBK::FormatString("Error parsing line #%1 with content '%2'.")
-					.arg(m_linesRead+1).arg(line), FUNC_ID);
+					.arg((unsigned int)m_linesRead+1).arg(line), FUNC_ID);
 	}
 }
 
