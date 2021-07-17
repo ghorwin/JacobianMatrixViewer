@@ -3,7 +3,16 @@
 #include <IBKMK_SparseMatrixCSR.h>
 #include <IBKMK_DenseMatrix.h>
 
-const double LIMIT = 1e-12;
+double AbstractMatrixAdapter::m_relTol = 1e-5;
+double AbstractMatrixAdapter::m_absTol = 1e-9;
+
+
+bool AbstractMatrixAdapter::nearlyEqual(double val1, double val2) const {
+	double nominalVal = std::max(std::fabs(val1), std::fabs(val2));
+	nominalVal = nominalVal*m_relTol + m_absTol; // weight
+	return  (std::fabs(val1-val2)/nominalVal < 1);
+}
+
 
 SingleMatrixAdapter::SingleMatrixAdapter() {
 
@@ -39,14 +48,14 @@ SingleMatrixAdapter::CellState SingleMatrixAdapter::state(unsigned int i, unsign
 		if (colIndx == m_sparseMatrixCSR->nnz())
 			return CS_Unused;
 		else {
-			if (std::fabs(value(i,j)) < LIMIT )
+			if (nearlyEqual(value(i,j), 0) )
 				return CS_Zero;
 			else
 				return CS_Used;
 		}
 	}
 	else if (m_denseMatrix != nullptr) {
-		if (std::fabs(value(i,j)) < LIMIT )
+		if (nearlyEqual(value(i,j), 0) )
 			return CS_Zero;
 		else
 			return CS_Used;
@@ -88,8 +97,7 @@ ComparisonMatrixAdapter::CellState ComparisonMatrixAdapter::state(unsigned int i
 
 	if (f1 == f2) {
 		if (f1 == CS_Used || f2 == CS_Used) {
-			double diff = std::fabs(m_first->value(i,j) - m_second->value(i,j));
-			if (diff < 1e-5)
+			if (nearlyEqual(m_first->value(i,j), m_second->value(i,j)) )
 				return CS_SlightlyDifferentByValue;
 			else
 				return CS_DifferentByValue;
@@ -123,8 +131,7 @@ ComparisonMatrixAdapter::CellState ComparisonMatrixAdapter::state(unsigned int i
 	}
 
 	// one is zero, the other has some value
-	double diff = std::fabs(m_first->value(i,j) - m_second->value(i,j));
-	if (diff < 1e-5)
+	if (nearlyEqual(m_first->value(i,j), m_second->value(i,j)) )
 		return CS_SlightlyDifferentByValue;
 	else
 		return CS_DifferentByValue;
@@ -142,3 +149,4 @@ double ComparisonMatrixAdapter::value(unsigned int i, unsigned int j) const {
 	}
 	return 0;
 }
+

@@ -50,6 +50,12 @@ public:
 		0 is returned. For different cell values, the differences is returned.
 	*/
 	virtual double value(unsigned int i, unsigned int j) const = 0;
+
+	/*! Evaluates difference between both values by used a relative and absolute threshold. */
+	bool nearlyEqual(double val1, double val2) const;
+
+	static double				m_relTol;
+	static double				m_absTol;
 };
 
 
@@ -73,7 +79,6 @@ public:
 	IBKMK::SparseMatrixCSR		*m_sparseMatrixCSR = nullptr;
 //	IBKMK::SparseMatrixEID		*m_sparseMatrixEID = nullptr;
 	IBKMK::DenseMatrix			*m_denseMatrix = nullptr;
-
 };
 
 
