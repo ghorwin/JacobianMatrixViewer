@@ -61,8 +61,15 @@ The conclusions to be drawn from the comparison above are:
 
 ## Binary matrix formats
 
-TODO ...
+Sparse matrix patterns and values are stored in CSR format. Take a look at `IBKMK::SparseMatrixCSR::serialize()` to see the memory layout. It is basically:
 
+- `char` (1 Byte) = 5  , indicates SparseMatrixCSR format
+- 4 x `uint32_t` with counters: `m_n`, `m_nnz`, `iaTLen`, `jaTLen`
+- `m_nnz` x `double` with actual content of matrix
+- `m_n+1` x `double` with ia index table
+- `m_nnz` x `double` with ja index table
+- `iaTLen` x `double` with content of iaT  (optional, `iaTLen` may be 0)
+- `haTLen` x `double` with content of jaT  (optional, `jaTLen` may be 0)
 
 
 
