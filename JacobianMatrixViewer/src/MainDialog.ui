@@ -44,7 +44,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="pushButtonExportImage">
        <property name="text">
         <string>Export image...</string>
        </property>

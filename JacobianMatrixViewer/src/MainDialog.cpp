@@ -279,3 +279,44 @@ QPixmap MainDialog::generatePixmap() const {
 void MainDialog::on_spinBoxPixel_valueChanged(int) {
 	updateView();
 }
+
+
+void MainDialog::on_pushButtonExportImage_clicked() {
+	if (m_tableModel->rowCount(QModelIndex()) == 0) {
+		QMessageBox::critical(this, QString(), tr("No image to export. Load and display a matrix first!"));
+		return;
+	}
+
+	QString openFile = QFileDialog::getSaveFileName(this, tr("Select image file"),
+													QString(), tr("All files (*);;Bitmap file (*.png);;PDF (*.pdf);;SVG (*.svg)"),
+													nullptr, QFileDialog::DontUseNativeDialog);
+	if (openFile.isEmpty())
+		return;
+
+	QString ext = QFileInfo(openFile).suffix();
+	if (ext.isEmpty()) {
+		openFile += ".png";
+		if (QFile(openFile).exists()) {
+			if (QMessageBox::question(this, QString(), tr("File '%1' exists already. Overwrite?").arg(openFile), QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes)
+				return;
+		}
+		ext = "png";
+	}
+	else
+		ext = ext.toLower();
+
+
+	// extension
+	if (ext == "png") {
+		// bitmap export
+
+		if (!ui->labelPixmap->pixmap()->save(openFile)) {
+			QMessageBox::critical(this, QString(), tr("Error save bitmap file '%1'.").arg(openFile));
+			return;
+		}
+	}
+	else {
+		QMessageBox::critical(this, QString(), tr("Sorry, pdf and svg export is not implemented, yet."));
+		return;
+	}
+}

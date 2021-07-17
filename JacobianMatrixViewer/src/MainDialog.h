@@ -31,6 +31,8 @@ private slots:
 
 	void on_spinBoxPixel_valueChanged(int arg1);
 
+	void on_pushButtonExportImage_clicked();
+
 private:
 	void readMatrix(SingleMatrixAdapter & storage, const QString & openFile);
 	void updateView();
