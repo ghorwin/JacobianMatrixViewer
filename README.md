@@ -74,8 +74,18 @@ Two options: CMake and Qt
 
 Got to subdirectory `build/cmake`.
 
-On windows, edit build
+#### Windows
 
+On Windows, simply run `build_VC_x64_with_pause.bat` (or `build_VC_x64.bat`, but the first will keep the console window open with potential error messages). Once the executable is built and copied to `bin/release_x64` go to this directory and run `deplay.bat`. This will pull and copy used DLLs into directory so that you can run the software from that directory.
 
-None, so far. Just download the source, fire up Qt Creator and build it yourself. I may add pre-compiled binaries once the tool is done.
+You may need to edit `build_VC_x64_with_pause.bat` and/or `deploy.bat` to specify correct paths to the VC build environment and Qt installation.
+
+#### Linux/Mac
+
+Simply run `build.sh` in a terminal.
+
+### Qt
+
+Easiest thing is to open the session project file `build/Qt/JacobianMatrixViewer.pro` in Qt Creator and build it. This is also the recommended way to do further development.
+
 
