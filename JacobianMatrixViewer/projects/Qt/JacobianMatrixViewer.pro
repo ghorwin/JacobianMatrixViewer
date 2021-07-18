@@ -60,3 +60,6 @@ SOURCES += \
 	../../src/MatrixAdapter.cpp \
 	../../src/MatrixTableModel.cpp \
 	../../src/main.cpp
+
+RESOURCES += \
+	../../resources/JacobianMatrixViewer.qrc

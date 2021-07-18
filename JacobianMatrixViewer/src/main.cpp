@@ -19,6 +19,7 @@
 #include "MainDialog.h"
 
 #include <QApplication>
+#include <QIcon>
 
 #include <IBK_Exception.h>
 #include <IBK_messages.h>
@@ -54,6 +55,7 @@ int main(int argc, char *argv[]) {
 	const QString ProgramVersionName = QString("JacobianMatrixViewer %1").arg(LONG_VERSION);
 
 	qApp->setApplicationName(ProgramVersionName);
+	qApp->setWindowIcon(QIcon("://JacobianMatrixViewer_64.png"));
 
 	// disable ? button in windows
 #if QT_VERSION >= 0x050A00

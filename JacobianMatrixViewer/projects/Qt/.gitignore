@@ -4,3 +4,4 @@
 /Makefile.JacobianMatrixViewer
 /.qmake.stash
 /Makefile
+/qrc_JacobianMatrixViewer.cpp
