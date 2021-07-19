@@ -23,7 +23,7 @@ file( GLOB APP_UIS ${PROJECT_SOURCE_DIR}/../../src/*.ui )
 
 # The Qt resource file (*.qrc)
 set( APP_QRCS	
-#	${PROJECT_SOURCE_DIR}/../../resources/JacobianMatrixViewer.qrc 
+	${PROJECT_SOURCE_DIR}/../../resources/JacobianMatrixViewer.qrc 
 )
 
 # set rc file
