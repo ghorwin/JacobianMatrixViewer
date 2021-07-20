@@ -109,10 +109,19 @@ void MainDialog::readMatrix(SingleMatrixAdapter & storage, const QString & openF
 			if (!in)
 				throw IBK::Exception("File io error.", FUNC_ID);
 
-			std::vector<unsigned char> buffer(std::istreambuf_iterator<char>(in), {});
+			// read size of data storage in file
+			uint64_t matSize;
+			if (!in.read((char*)&matSize, sizeof(uint64_t)))
+				throw IBK::Exception("Error reading matrix size from file.", FUNC_ID);
+			// reserve memory
+			std::string smem(matSize, ' ');
+			// read matrix data
+			if (!in.read(&smem[0], (std::streamsize)matSize))
+				throw IBK::Exception("Error reading matrix data from file.", FUNC_ID);
+			in.close();
 
 			// determine matrix type
-			void * dataPtr = buffer.data();
+			void * dataPtr = (void*)&smem[0];
 			char matType = *(char*)dataPtr;
 
 			switch (matType) {
