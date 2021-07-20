@@ -64,13 +64,18 @@ The conclusions to be drawn from the comparison above are:
 Sparse matrix patterns and values are stored in CSR format. Take a look at `IBKMK::SparseMatrixCSR::serialize()` to see the memory layout. It is basically:
 
 - `char` (1 Byte) = 5  , indicates SparseMatrixCSR format
-- 4 x `uint32_t` with counters: `m_n`, `m_nnz`, `iaTLen`, `jaTLen`
-- `m_nnz` x `double` with actual content of matrix
-- `m_n+1` x `double` with ia index table
-- `m_nnz` x `double` with ja index table
-- `iaTLen` x `double` with content of iaT  (optional, `iaTLen` may be 0)
-- `haTLen` x `double` with content of jaT  (optional, `jaTLen` may be 0)
+- `uint32_t` with counter `m_n`
+- `uint32_t` with counter `m_nnz`
+- binary vector with actual data of matrix (all non-zero elements)
+- binary vector with ia index table (may not have zero length)
+- binary vector with ja index table (may not have zero length)
+- binary vector with iaT index table (only for assymmetric matrixes, may have length 0)
+- binary vector with jaT index table (only for assymmetric matrixes, may have length 0)
 
+Binary vectors are serialized by first writing the number of elements in the vector
+as `uint32_t`, followed by the memory block with the actual content.
+
+Look also at the serialization functions in `IBK_InputOutput.h`.
 
 
 ## Building from source
