@@ -61,6 +61,17 @@ The conclusions to be drawn from the comparison above are:
 
 ## Binary matrix formats
 
+Generally, the binary matrix file is composed as follows:
+
+- `uint64_t` with size of matrix data block to follow = `matSize`
+- `matSize` bytes with binary matrix storage data
+
+The matrix storage block is different for different matrix types. Currently supported are Dense and Sparse-CSR-matrixes.
+
+See example files `data/jacobian_dense.bin` and `data/jacobian_sparse.bin`.
+
+### Sparse Matrix with CSR-storage
+
 Sparse matrix patterns and values are stored in CSR format. Take a look at `IBKMK::SparseMatrixCSR::serialize()` to see the memory layout. It is basically:
 
 - `char` (1 Byte) = 5  , indicates SparseMatrixCSR format
@@ -71,6 +82,15 @@ Sparse matrix patterns and values are stored in CSR format. Take a look at `IBKM
 - binary vector with ja index table (may not have zero length)
 - binary vector with iaT index table (only for assymmetric matrixes, may have length 0)
 - binary vector with jaT index table (only for assymmetric matrixes, may have length 0)
+
+### Dense Matrix storage
+
+- `char` (1 Byte) = 1  , indicates Dense matrix format
+- `uint32_t` with counter `m_n`
+- binary vector with actual data of matrix (vector of doubles)
+- binary vector with pivot elements (vector of long int)
+
+### Binary vectors storage
 
 Binary vectors are serialized by first writing the number of elements in the vector
 as `uint32_t`, followed by the memory block with the actual content.
