@@ -50,11 +50,11 @@ This is a bit more colorful:
 
 - _orange_ : cells that are zero in one matrix and non-existend in the other; usually this means that these cells are not part of the Jacobian pattern
 - _light blue_ : cells that have values in both matrixes and whose values differ only marginally (compared with relative tolerance of 1e-5 and absolute tolerance of 1e-9)
-- _blue_ : cells that have values in both matrixes and show significant differences -> this usually indicates a *bug* in the Jacobian calculation/composition algorithm
+- _blue_ : cells that have values in both matrixes and show significant differences -> this usually indicates a *bug* in the Jacobian calculation/composition algorithm, or can be just a symptom of missing cells in the sparse Jacobian pattern, resuling in invalid coloring information. Hence, inside the DQ-algorithms columns are modified at the same time whose states are used by the same equations, thus resulting in invalid values being calculated.
 - _red_ : cells that have values in one matrix, yet are not part of the Jacobian pattern in the other matrix. This clearly indicates that the sparse matrix is missing cells in its pattern.
 
 
-The conclusions to be drawn from the comparison above are:
+The conclusions to be drawn from the example comparison table above are:
 - the lower cells in column 1 are correctly present in the sparse matrix pattern, yet computed wrong (or not at all); this may indicate a bug in the coloring algorithm of the Jacobian composition algorithm that uses the matrix pattern
 - the red cell (2,1) indicates that this cell is missing in the sparse matrix pattern
 - the blue cell (2,3) shows an invalid value -> probably related to the cell (2,1) issue
