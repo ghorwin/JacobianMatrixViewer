@@ -66,6 +66,7 @@ int main(int argc, char *argv[]) {
 
 	// *** Setup and show MainDialog and start event loop ***
 	MainDialog w;
+	w.resize(1400,800);
 	w.show();
 
 	// start event loop
