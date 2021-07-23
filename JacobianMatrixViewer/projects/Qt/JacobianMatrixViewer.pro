@@ -52,8 +52,7 @@ HEADERS += \
 	../../src/MatrixAdapter.h \
 	../../src/MatrixInterfaceBand.h \
 	../../src/MatrixInterfaceSparse.h \
-	../../src/MatrixTableModel.h \
-	../../src/MatrixVisualizer.h
+	../../src/MatrixTableModel.h
 
 SOURCES += \
 	../../src/MainDialog.cpp \

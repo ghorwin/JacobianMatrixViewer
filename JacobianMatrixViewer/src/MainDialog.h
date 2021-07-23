@@ -33,6 +33,10 @@ private slots:
 
 	void on_pushButtonExportImage_clicked();
 
+	void on_toolButtonReloadFirstMatrix_clicked();
+
+	void on_toolButtonReloadSecondMatrix_clicked();
+
 private:
 	void readMatrix(SingleMatrixAdapter & storage, const QString & openFile);
 	void updateView();

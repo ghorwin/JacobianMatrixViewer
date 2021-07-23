@@ -71,6 +71,16 @@ void MainDialog::on_pushButtonReadMatrix_clicked() {
 		ui->lineEditMatrixFile->setText(openFile);
 	else
 		ui->lineEditMatrixFile->clear();
+
+	// when there is no other matrix yet (i.e. first matrix is read), adjust the pixel size to fit the matrix to view
+	if (ui->lineEditOtherMatrixFile->text().isEmpty()) {
+		if (m_mainMatrix.dimension() > 0) {
+			int pixelSize = (int)std::floor(600/m_mainMatrix.dimension());
+			pixelSize =  std::min(20, pixelSize);
+			ui->spinBoxPixel->setValue(pixelSize);
+		}
+
+	}
 	updateView();
 }
 
@@ -236,16 +246,14 @@ void MainDialog::on_radioButtonDifference_toggled(bool checked) {
 
 QPixmap MainDialog::generatePixmap() const {
 	// compute size in pixels
-	unsigned int n = m_tableModel->rowCount(QModelIndex());
+	int n = m_tableModel->rowCount(QModelIndex());
 	if (n == 0)
 		return QPixmap();
 
-	unsigned int cellPixelSize = ui->spinBoxPixel->value();
-	unsigned int pixSize = n*cellPixelSize;
-	unsigned int borderLinePixelWidth = 1;
+	int cellPixelSize = ui->spinBoxPixel->value();
+	int pixSize = n*cellPixelSize;
+	int borderLinePixelWidth = 1;
 	QColor backgroundColor(Qt::white);
-	QColor usedCellColor(Qt::black);
-	QColor usedButZeroCellColor(Qt::lightGray);
 
 	// create pixmap with desired sizes but add pixels for boundary
 	QPixmap pixmap(pixSize + 2*borderLinePixelWidth, pixSize + 2*borderLinePixelWidth);
@@ -256,18 +264,34 @@ QPixmap MainDialog::generatePixmap() const {
 	QPainter p(&pixmap);
 
 	// draw pixels
-	for (unsigned int i=0; i<n; ++i) {
-		for (unsigned int j=0; j<n; ++j) {
+	for (int i=0; i<n; ++i) {
+		for (int j=0; j<n; ++j) {
 			// get state of cell
-			AbstractMatrixAdapter::CellState s = m_tableModel->matrixAdapter()->state(i,j);
+			AbstractMatrixAdapter::CellState s = m_tableModel->matrixAdapter()->state((unsigned int)i, (unsigned int)j);
 			if (s == AbstractMatrixAdapter::CS_Unused)
 				continue;
 			QColor cellColor;
-			if (s == AbstractMatrixAdapter::CS_Zero)
-				cellColor = usedButZeroCellColor;
-			else
-				cellColor = usedCellColor;
-
+			switch (s) {
+				case AbstractMatrixAdapter::CS_Used:
+					cellColor = Qt::black;
+				break;
+				case AbstractMatrixAdapter::CS_DifferentByUsage:
+					cellColor = QColor("#E50000");
+				break;
+				case AbstractMatrixAdapter::CS_MayBeDifferentByUsage:
+					cellColor = QColor("#FFE0AD");
+				break;
+				case AbstractMatrixAdapter::CS_DifferentByValue:
+					cellColor = QColor("#65C3FF");
+				break;
+				case AbstractMatrixAdapter::CS_SlightlyDifferentByValue:
+					cellColor = QColor("#E6ECFF");
+				break;
+				case AbstractMatrixAdapter::CS_Zero :
+					cellColor = Qt::lightGray;
+				break;
+				case AbstractMatrixAdapter::CS_Unused: ; // just to make compiler happy
+			}
 //			double val = m_tableModel->matrixAdapter()->value(i,j);
 			p.fillRect(borderLinePixelWidth + j*cellPixelSize, borderLinePixelWidth + i*cellPixelSize,
 					   cellPixelSize, cellPixelSize, cellColor);
@@ -276,12 +300,11 @@ QPixmap MainDialog::generatePixmap() const {
 
 	// draw boundary
 	if (borderLinePixelWidth != 0) {
-		QPen borderPen(usedCellColor);
+		QPen borderPen(Qt::black);
 		borderPen.setWidth(borderLinePixelWidth);
 
 		p.setPen( borderPen );
-		p.drawRect(borderLinePixelWidth/2,borderLinePixelWidth/2,
-				   pixSize+1.5*borderLinePixelWidth, pixSize+1.5*borderLinePixelWidth);
+		p.drawRect(0, 0, pixSize+borderLinePixelWidth, pixSize+borderLinePixelWidth);
 	}
 
 	return pixmap;
@@ -331,4 +354,24 @@ void MainDialog::on_pushButtonExportImage_clicked() {
 		QMessageBox::critical(this, QString(), tr("Sorry, pdf and svg export is not implemented, yet."));
 		return;
 	}
+}
+
+
+void MainDialog::on_toolButtonReloadFirstMatrix_clicked() {
+	QString openFile = ui->lineEditMatrixFile->text();
+	if (openFile.isEmpty()) return;
+	readMatrix(m_mainMatrix, openFile);
+	if (m_mainMatrix.dimension() == 0)
+		QMessageBox::critical(this, QString(), tr("Cannot read file '%1'").arg(openFile));
+	updateView();
+}
+
+
+void MainDialog::on_toolButtonReloadSecondMatrix_clicked() {
+	QString openFile = ui->lineEditOtherMatrixFile->text();
+	if (openFile.isEmpty()) return;
+	readMatrix(m_mainMatrix, openFile);
+	if (m_mainMatrix.dimension() == 0)
+		QMessageBox::critical(this, QString(), tr("Cannot read file '%1'").arg(openFile));
+	updateView();
 }
