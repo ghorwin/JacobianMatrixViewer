@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=JacobianMatrixViewer 1.0.1
+Comment=A sparse-matrix/dense matrix pattern and difference viewer
+Exec=JacobianMatrixViewer
+Icon=JacobianMatrixViewer_64.png
+Terminal=false
+Type=Application
+Categories=Science;Engineering;Physics
+StartupNotify=true
+GenericName[de_DE]=Ein Betrachter und Vergleicher für die Besetzung und Inhalte von schwach-besetzten und dicht besetzten Matrizen
