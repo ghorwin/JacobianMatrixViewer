@@ -62,7 +62,7 @@ if( UNIX )
 	if( APPLE )
 		add_executable( ${PROJECT_NAME} MACOSX_BUNDLE 
 						${APP_SRCS} ${APP_MOC_SRCS} ${APP_RC_SRCS} ${APP_UI_SRCS}
-						${PROJECT_SOURCE_DIR}/../../resources/gfx/JacobianMatrixViewer.icns
+						${PROJECT_SOURCE_DIR}/../../resources/JacobianMatrixViewer.icns
 		)
 	else( APPLE )
 		add_executable( ${PROJECT_NAME} 
