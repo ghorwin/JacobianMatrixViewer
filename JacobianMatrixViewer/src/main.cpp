@@ -26,7 +26,7 @@
 #include <IBK_ArgParser.h>
 #include <IBK_BuildFlags.h>
 
-const char * const LONG_VERSION = "1.0.0";
+const char * const LONG_VERSION = "1.0.1";
 
 /*! qDebug() message handler function, redirects debug messages to IBK::IBK_Message(). */
 void qDebugMsgHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg) {

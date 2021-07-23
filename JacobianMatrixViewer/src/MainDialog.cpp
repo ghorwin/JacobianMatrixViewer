@@ -370,8 +370,8 @@ void MainDialog::on_toolButtonReloadFirstMatrix_clicked() {
 void MainDialog::on_toolButtonReloadSecondMatrix_clicked() {
 	QString openFile = ui->lineEditOtherMatrixFile->text();
 	if (openFile.isEmpty()) return;
-	readMatrix(m_mainMatrix, openFile);
-	if (m_mainMatrix.dimension() == 0)
+	readMatrix(m_otherMatrix, openFile);
+	if (m_otherMatrix.dimension() == 0)
 		QMessageBox::critical(this, QString(), tr("Cannot read file '%1'").arg(openFile));
 	updateView();
 }
