@@ -108,7 +108,7 @@ Got to subdirectory `build/cmake`.
 
 #### Windows
 
-On Windows, simply run `build_VC_x64_with_pause.bat` (or `build_VC_x64.bat`, but the first will keep the console window open with potential error messages). Once the executable is built and copied to `bin/release_x64` go to this directory and run `deplay.bat`. This will pull and copy used DLLs into directory so that you can run the software from that directory.
+On Windows, simply run `build_VC_x64_with_pause.bat` (or `build_VC_x64.bat`, but the first will keep the console window open with potential error messages). Once the executable is built and copied to `bin/release_x64` go to this directory and run `deploy.bat`. This will pull and copy used DLLs into the directory so that you can run the software from that directory.
 
 You may need to edit `build_VC_x64_with_pause.bat` and/or `deploy.bat` to specify correct paths to the VC build environment and Qt installation.
 
