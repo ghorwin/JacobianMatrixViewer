@@ -288,7 +288,7 @@ QPixmap MainDialog::generatePixmap() const {
 					cellColor = QColor("#E6ECFF");
 				break;
 				case AbstractMatrixAdapter::CS_Zero :
-					cellColor = Qt::lightGray;
+					cellColor = backgroundColor;
 				break;
 				case AbstractMatrixAdapter::CS_Unused: ; // just to make compiler happy
 			}
