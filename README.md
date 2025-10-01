@@ -1,13 +1,8 @@
 # JacobianMatrixViewer
 
-Displays Jacobian matrix structure, exports images and allows comparison between Jacobian matrix patterns.
+Displays the structure of the Jacobian matrix, exports images, and enables comparison between different Jacobian patterns.
 
-This is a small tool to assist in developing numerical solver engines, where Newton-Raphson methods
-are used with custom Jacobians. Hereby, using an incomplete Jacobian pattern, or incorrectly computed
-pattern will easily hamper efficiency of the Newton method. Sometimes this leads to increased number of
-convergence failures, but often enough the effects are subtle, and it is hard to identify these as mistakes.
-Especially, since a well-written Newton-equation solver within an adaptive time step integrator will
-still yield correct results - yet potentially much slower.
+This is a lightweight tool designed to support the development of numerical solver engines that use Newton-Raphson methods with custom Jacobians. An incomplete or incorrectly computed Jacobian pattern can significantly reduce the efficiency of the Newton method. While this may sometimes lead to an increased number of convergence failures, the impact is often subtle and difficult to diagnose. This is especially true when using a well-implemented Newton solver within an adaptive time-step integrator, which may still produce correct results—but at a substantially higher computational cost.
 
 ## Installation
 
