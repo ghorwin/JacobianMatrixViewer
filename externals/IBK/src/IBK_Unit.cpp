@@ -38,13 +38,11 @@
 
 #include "IBK_configuration.h"
 
-#include <stdexcept>
 #include <iostream>
 
 #include "IBK_Unit.h"
 #include "IBK_UnitData.h"
 #include "IBK_UnitList.h"
-#include "IBK_StringUtils.h"
 #include "IBK_Exception.h"
 #include "IBK_FormatString.h"
 
@@ -70,6 +68,7 @@ Unit::Unit(unsigned int unitid) {
 	m_name = unit->name();
 #endif // IBK_ENABLE_UNIT_NAME
 }
+
 
 void Unit::set(unsigned int unitid) {
 	if (unitid>=UnitList::instance().size())

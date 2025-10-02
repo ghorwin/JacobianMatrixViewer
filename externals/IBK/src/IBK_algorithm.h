@@ -44,8 +44,6 @@
 #include <sstream>
 #include <map>
 
-#include "IBK_configuration.h"
-#include "IBK_messages.h"
 #include "IBK_Exception.h"
 
 namespace IBK {
@@ -269,6 +267,34 @@ bool all_empty(Iterator first, const Iterator & last) {
 }
 
 
+/*! Algorithm that searches a std-container (with begin(), end() and const_iterator) for a given value,
+	usually requiring a matching comparison operator.
+
+	\code
+	std::vector<double> vals;
+	std::vector<double>::const_iterator it;
+
+	// example with std c++ find()
+	it = std::find(vals.begin(), vals.end(), 10);
+	// example with IBK::find()
+	it = IBK::find(vals, 10);
+
+	if (it != vals.end()) {
+		///
+	}
+
+	\endcode
+*/
+template <typename Container, typename Var>
+typename Container::const_iterator find(const Container & c, Var & v) {
+	typename Container::const_iterator it = c.begin();
+	while (it != c.end())
+		if (*it == v) return it;
+		else ++it;
+	return it;
+}
+
+
 /*! For each element in the range [first,last] a new element is appened to the
 	container 'cont' and the member function read() is called with the element
 	as parameter.
@@ -406,6 +432,17 @@ void write_range_XML(const_it first, const_it last, XMLElementType * element) {
 		(first++)->writeXML(element);
 }
 
+
+/*! Calls the member function writeXML(element) in all elements in the range [first,last].
+	Remember to include the declarations for iterator_traits<const_it>::value_type (or
+	in other words the declaration of the type first and last are pointing to) before
+	IBK_algorithm.h.
+*/
+template <class const_it, typename XMLElementType>
+void write_range_XML(const_it first, const_it last, XMLElementType * element, bool write_all) {
+	while (first!=last)
+		(first++)->writeXML(element, write_all);
+}
 
 
 /*! \brief Appends indexes like '[1]' with increasing numbers to the basename until no

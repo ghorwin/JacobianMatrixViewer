@@ -40,16 +40,16 @@
 
 #include <IBK_messages.h>
 
-#include <CDT.h>
+#include "CDT/CDT.h"
 
 namespace IBKMK {
 
 bool Triangulation::setPoints(const std::vector<IBK::point2D<double> > & points,
-							  const std::vector<std::pair<unsigned int, unsigned int> > & edges)
-{
-//	FUNCID(Triangulation::setPoints);
+							  const std::vector<std::pair<unsigned int, unsigned int> > & edges) {
+	// FUNCID(Triangulation::setPoints);
 
-	CDT::Triangulation<double> cdt(CDT::FindingClosestPoint::ClosestRandom); // Note: we don't want to use boost
+	CDT::Triangulation<double> cdt(CDT::VertexInsertionOrder::Auto,
+								   CDT::IntersectingConstraintEdges::TryResolve, 1e-4); // Note: we don't want to use boost
 
 	IBK_ASSERT(sizeof(CDT::V2d<double>) == sizeof(IBK::point2D<double>));
 	// since IBK::point2D<double> and CDT::V2d<double> are internally the same, we can just re-interpret our original

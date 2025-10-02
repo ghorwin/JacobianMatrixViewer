@@ -74,13 +74,18 @@ public:
 	}
 
 	/*! returns distance to other vector */
-	double distanceTo(const Vector3D &v){
+	double distanceTo(const Vector3D &v) const{
 		return Vector3D(*this - v).magnitude();
 	}
 
 	/*! Returns the magnitude of the vector. */
 	double magnitude() const {
 		return std::sqrt(m_x*m_x + m_y*m_y + m_z*m_z);
+	}
+
+	/*! Returns the magnitude squared of the vector. */
+	double magnitudeSquared() const {
+		return m_x*m_x + m_y*m_y + m_z*m_z;
 	}
 
 	/*! Returns the cross product of this vector with another.
@@ -176,10 +181,18 @@ public:
 	}
 
 	/*! returns point2D with z=0 */
-	IBK::point2D<double> point2D(){
+	IBK::point2D<double> point2D() const{
 		return IBK::point2D<double>(m_x, m_y);
 	}
 
+	/*! Converts a vector to a string in format "x y z". */
+	std::string toString() const;
+
+	/*! Converts a vector to a string in format "x y z". */
+	std::string toString(int precision) const;
+
+	/*! Converts a vector from a string in format "x y z". Throws an exception if parsing of numbers fails. */
+	static Vector3D fromString(const std::string & vecString);
 };
 
 /*! Scales all components of the vector with the scalar \a scalar. */

@@ -41,6 +41,7 @@
 #include <fstream>
 #include <algorithm>
 #include <functional>
+#include <limits>
 
 #include "IBKMK_SparseMatrixCSR.h"
 #include "IBKMKC_sparse_matrix.h"
@@ -172,7 +173,7 @@ void SparseMatrixCSR::resizeFromEID(unsigned int n, unsigned int elementsPerRow,
 		}
 		// store row offset
 		std::transform(m_ia.begin() + i + 1, m_ia.end(), m_ia.begin() + i + 1,
-			std::bind1st(std::plus<unsigned int>(), nValidIndices));
+			std::bind(std::plus<unsigned int>(), nValidIndices, std::placeholders::_1));
 	}
 	// set number of nonzero elements
 	m_nnz = (unsigned int)m_ja.size();

@@ -323,6 +323,7 @@ public:
 	IBK::Path withoutExtension() const;
 
 
+
 	// ** Modification Routines **
 
 	/*! Appends another path to this path.
@@ -508,6 +509,10 @@ public:
 
 	// ** static functions **
 
+	/*! Returns a list of subdirectories of a given path. */
+	static void subdirectories(const IBK::Path & parentDir, std::vector<std::string> & subdirNames);
+	/*! Returns a list of files within a given path. */
+	static void files(const Path & parentDir, std::vector<std::string> & fileNames);
 
 	/*! Set the file date to given date and time
 		\param filename Filename with path (must exist).

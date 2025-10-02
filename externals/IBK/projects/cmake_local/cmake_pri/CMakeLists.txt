@@ -2,9 +2,16 @@
 
 # on Unix and Apple we want really detailed warnings
 if (UNIX)
+	# C++17 standard for Linux builds
+	set(CMAKE_CXX_STANDARD 17)
+	set(CMAKE_CXX_STANDARD_REQUIRED ON)
+	set(CMAKE_CXX_EXTENSIONS OFF)
+	# all warnings
 	ADD_DEFINITIONS( -Wall )
 	# our code does not check for errno values, so we can skip this feature
 	ADD_DEFINITIONS( -fno-math-errno )
+	# create position independent code (needed for dynamic libs)
+	ADD_DEFINITIONS( -fPIC )
 endif (UNIX)
 
 
@@ -29,7 +36,7 @@ IF ( UNIX )
 			ELSE ( USE_OMP )
 
 				MESSAGE( STATUS "No OpenMP support - ignoring unknown pragmas")
-				ADD_DEFINITIONS( -Wunknown-pragmas )
+				ADD_DEFINITIONS( -Wno-unknown-pragmas )
 
 			ENDIF ( USE_OMP )
 
@@ -89,7 +96,7 @@ IF ( UNIX )
 		ELSE ( USE_OMP )
 
 			MESSAGE( STATUS "No OpenMP support - ignoring unknown pragmas")
-			ADD_DEFINITIONS( -Wunknown-pragmas )
+			ADD_DEFINITIONS( -Wno-unknown-pragmas )
 
 		ENDIF ( USE_OMP )
 
@@ -113,7 +120,7 @@ ELSE ( UNIX  )
 			#ADD_DEFINITIONS( -fopenmp )
 		ELSE ( USE_OMP )
 
-			ADD_DEFINITIONS( -Wunknown-pragmas )
+			ADD_DEFINITIONS( -Wno-unknown-pragmas )
 
 		ENDIF ( USE_OMP )
 
@@ -129,7 +136,7 @@ ELSE ( UNIX  )
 		ELSE ( USE_OMP )
 
 			MESSAGE( STATUS "No OpenMP support - ignoring unknown pragmas")
-			#ADD_DEFINITIONS( -Wunknown-pragmas )
+			#ADD_DEFINITIONS( -Wno-unknown-pragmas )
 
 		ENDIF ( USE_OMP )
 

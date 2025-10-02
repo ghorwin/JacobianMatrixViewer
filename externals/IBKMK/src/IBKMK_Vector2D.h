@@ -63,6 +63,15 @@ public:
 	{
 	}
 
+	/*! Fuzzy vector comparision.
+		\param digits specifies the digitis to be compared
+	*/
+	template<int digits>
+	bool equal(const IBKMK::Vector2D &other) const {
+		return IBK::nearly_equal<digits>(m_x, other.m_x) &&
+				IBK::nearly_equal<digits>(m_y, other.m_y);
+	}
+
 	/*! returns distance to other vector */
 	double distanceTo(const Vector2D &v){
 		return Vector2D(*this - v).magnitude();
@@ -71,6 +80,11 @@ public:
 	/*! Returns the magnitude of the vector. */
 	double magnitude() const {
 		return std::sqrt(m_x*m_x + m_y*m_y);
+	}
+
+	/*! Returns the magnitude squared of the vector. */
+	double magnitudeSquared() const {
+		return m_x*m_x + m_y*m_y;
 	}
 
 	/*! Returns the scalar product of this and another vector. */
@@ -140,6 +154,13 @@ public:
 		tmp -= other;
 		return tmp;
 	}
+
+	/*! Converts a vector to a string in format "x y z". */
+	std::string toString() const;
+	/*! Converts a vector to a string in format "x y z" with given numerical precision */
+	std::string toString(int precision) const;
+	/*! Converts a vector from a string in format "x y z". Throws an exception if parsing of numbers fails. */
+	static Vector2D fromString(const std::string & vecString);
 
 };
 

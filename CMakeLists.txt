@@ -1,10 +1,10 @@
 # CMakeLists.txt file for JacobianMatrixViewer
 
-# The project name
-project( JacobianMatrixViewer )
-
 # Require a fairly recent cmake version
 cmake_minimum_required( VERSION 3.0.0 )
+
+# The project name
+project( JacobianMatrixViewer )
 
 # enable @rpath on MacOS
 cmake_policy(SET CMP0042 NEW)
@@ -106,19 +106,19 @@ endif( APPLE )
 # -------------------------------------------------------------
 # Support for build flags
 # -------------------------------------------------------------
-include( ../../externals/IBK/projects/cmake_local/cmake_pri/CMakeLists.txt  )
+include( externals/IBK/projects/cmake_local/cmake_pri/CMakeLists.txt  )
 
 # -------------------------------------------------------------
 # subdirectories and subprojects
 # -------------------------------------------------------------
 
 # add subdirectories for all builds
-add_subdirectory( ../../externals/IBK/projects/cmake_local IBK )
-add_subdirectory( ../../externals/IBKMK/projects/cmake_local IBKMK )
+add_subdirectory( externals/IBK IBK)
+add_subdirectory( externals/IBKMK/projects/cmake_local IBKMK )
 
 # -------------------------------------------------------------
 # applications and FMI Interface
 # -------------------------------------------------------------
 
-add_subdirectory( ../../JacobianMatrixViewer/projects/cmake_local JacobianMatrixViewer)
+add_subdirectory( JacobianMatrixViewer )
 

@@ -51,19 +51,20 @@
 
 #include <sys/stat.h>
 
-#include <locale>
 #include <ctime>
 #include <cctype>
 #include <algorithm>
 #include <cerrno>
 #include <cstdio>
-#include <fstream>
 #include <string>
+#include <fstream>
 
+#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
+#include <filesystem>
+#endif
 
 #include "IBK_messages.h"
 #include "IBK_assert.h"
-//#include "utf8/utf8.h"
 
 
 namespace IBK {
@@ -1025,6 +1026,90 @@ void Path::makeFatCompatible() {
 }
 
 
+#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
+
+void Path::subdirectories(const Path & parentDir, std::vector<std::string> & subdirNames) {
+	std::string dirPath = parentDir.str();
+	subdirNames.clear();
+	// Check if the directory exists
+	if (!std::filesystem::exists(dirPath) || !std::filesystem::is_directory(dirPath))
+		return;
+
+	// Iterate through the directory and list subdirectories
+	for (const auto& entry : std::filesystem::directory_iterator(dirPath)) {
+		if (std::filesystem::is_directory(entry))
+			subdirNames.push_back(entry.path().filename().string());
+	}
+}
+
+void Path::files(const Path & parentDir, std::vector<std::string> & fileNames) {
+	std::string dirPath = parentDir.str();
+	fileNames.clear();
+	// Check if the directory exists
+	if (!std::filesystem::exists(dirPath) || !std::filesystem::is_directory(dirPath))
+		return;
+
+	// Iterate through the directory and list subdirectories
+	for (const auto& entry : std::filesystem::directory_iterator(dirPath)) {
+		if (!std::filesystem::is_directory(entry))
+			fileNames.push_back(entry.path().filename().string());
+	}
+}
+
+#else
+
+// MinGW specific code, using WinAPI
+
+void Path::subdirectories(const Path & parentDir, std::vector<std::string> & subdirNames) {
+	std::string search_path = parentDir.str() + "\\*";
+#if _WIN32
+	// Check if the directory exists
+	WIN32_FIND_DATAA find_data;
+	HANDLE hFind = FindFirstFileA(search_path.c_str(), &find_data);
+	if (hFind == INVALID_HANDLE_VALUE) {
+		return;
+	}
+
+	// Iterate through the directory and list subdirectories
+	do {
+		const std::string name = find_data.cFileName;
+		if (name == "." || name == "..") continue;
+		if (find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+			subdirNames.push_back(name);
+	} while (FindNextFileA(hFind, &find_data));
+
+	FindClose(hFind);
+#else
+#endif
+}
+
+
+void Path::files(const Path & parentDir, std::vector<std::string> & fileNames) {
+	std::string search_path = parentDir.str() + "\\*";
+
+	// Check if the directory exists
+	WIN32_FIND_DATAA find_data;
+	HANDLE hFind = FindFirstFileA(search_path.c_str(), &find_data);
+	if (hFind == INVALID_HANDLE_VALUE) {
+		return;
+	}
+
+	// Iterate through the directory and list files in this directory
+	do {
+		const std::string name = find_data.cFileName;
+		if (name == "." || name == "..") continue;
+		std::string full_path = parentDir.str() + "\\" + name;
+		if (!(find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+			fileNames.push_back(name);
+	} while (FindNextFileA(hFind, &find_data));
+
+	FindClose(hFind);
+}
+
+
+#endif // #if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
+
+
 bool Path::setFileTime(	const IBK::Path& filename,
 						int hour,
 						int minute,
@@ -1295,7 +1380,7 @@ bool Path::makePath( const IBK::Path & p ) {
 			if((mdret=mkdir(dir.c_str(),mode)) && errno!=EEXIST){
 				switch (mdret) {
 					case EACCES			: IBK_Message(FormatString("Cannot create directory %1, access denied!").arg(p), MSG_ERROR, FUNC_ID); break;
-					case EEXIST			: IBK_Message(FormatString("Cannot create directory %1, it alreay exists!").arg(p), MSG_ERROR, FUNC_ID); break;
+					case EEXIST			: IBK_Message(FormatString("Cannot create directory %1, it already exists!").arg(p), MSG_ERROR, FUNC_ID); break;
 					case ENOTDIR		: IBK_Message(FormatString("Cannot create directory %1, invalid path!").arg(p), MSG_ERROR, FUNC_ID); break;
 					case ENOENT			: IBK_Message(FormatString("Cannot create directory %1, some component of the path doesn't exist!").arg(p), MSG_ERROR, FUNC_ID); ;break;
 					case EFAULT			: IBK_Message("EFAULT", MSG_ERROR, FUNC_ID); break;

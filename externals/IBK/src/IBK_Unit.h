@@ -143,7 +143,7 @@ protected:
 /*! Hardcoded define of the unit ID for meters, to allow fast and efficient checks for unit 'm' */
 #define IBK_UNIT_ID_METERS 1
 /*! Hardcoded define of the unit ID for seconds, to allow fast and efficient checks for unit 's' */
-#define IBK_UNIT_ID_SECONDS 13
+#define IBK_UNIT_ID_SECONDS 14
 
 /*! Comparison operator== tests, whether two units are equal. */
 inline bool operator==(const Unit& lhs, const Unit& rhs) { return lhs.m_id==rhs.m_id; }
