@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # Build script for building application and all dependend libraries
 
 # Command line options:
@@ -70,16 +69,17 @@ fi
 
 cd $BUILDDIR && cmake $CMAKE_OPTIONS $CMAKE_BUILD_TYPE $CMAKE_COMPILER_OPTIONS $CMAKELISTSDIR && make -j$MAKE_CPUCOUNT &&
 cd $CMAKELISTSDIR &&
-mkdir -p ../bin/release &&
+# now we are top level
+mkdir -p bin/release &&
 echo "*** Copying executable to bin/release ***" &&
 
 # mac os app
-if [ -d $BUILDDIR/JacobianMatrixViewer/JacobianMatrixViewer.app ]
+if [ -d build/$BUILDDIR/JacobianMatrixViewer/JacobianMatrixViewer.app ]
 then
 	# MacOS
-	rm -rf ../bin/release/JacobianMatrixViewer.app
-	cp -r $BUILDDIR/JacobianMatrixViewer/JacobianMatrixViewer.app ../bin/release/JacobianMatrixViewer.app
+	rm -rf bin/release/JacobianMatrixViewer.app
+	cp -r build/$BUILDDIR/JacobianMatrixViewer/JacobianMatrixViewer.app bin/release/JacobianMatrixViewer.app
 else
-	cp $BUILDDIR/JacobianMatrixViewer/JacobianMatrixViewer ../bin/release/JacobianMatrixViewer
+	cp build/$BUILDDIR/JacobianMatrixViewer/JacobianMatrixViewer bin/release/JacobianMatrixViewer
 fi
 
