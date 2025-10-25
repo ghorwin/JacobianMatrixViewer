@@ -113,7 +113,7 @@ include( externals/IBK/projects/cmake_local/cmake_pri/CMakeLists.txt  )
 # -------------------------------------------------------------
 
 # add subdirectories for all builds
-add_subdirectory( externals/IBK IBK)
+add_subdirectory( externals/IBK/projects/cmake_local IBK)
 add_subdirectory( externals/IBKMK/projects/cmake_local IBKMK )
 
 # -------------------------------------------------------------
